@@ -79,6 +79,18 @@ func (h *CephInstaller) CreateRookCephClusterViaHelm(values map[string]interface
 		"enabled": true,
 		"image":   "rook/ceph:" + LocalBuildTag,
 	}
+	values["ingress"] = map[string]interface{}{
+		"dashboard": map[string]interface{}{
+			"annotations": map[string]interface{}{
+				"kubernetes.io/ingress-class":                "nginx",
+				"nginx.ingress.kubernetes.io/rewrite-target": "/ceph-dashboard/$2",
+			},
+			"host": map[string]interface{}{
+				"name": "example.rook.io",
+				"path": "/ceph(/|$)(.*)",
+			},
+		},
+	}
 	values["cephClusterSpec"] = clusterCRD["spec"]
 
 	if err := h.CreateBlockPoolConfiguration(values, blockPoolName, blockPoolSCName); err != nil {

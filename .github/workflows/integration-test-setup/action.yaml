@@ -21,7 +21,7 @@ runs:
         with:
           minikube version: "v1.23.2"
           kubernetes version: ${{ inputs.kubernetes-version }}
-          start args: --memory 6g --cpus=2
+          start args: --memory 6g --cpus=2 --addons ingress
           github token: ${{ inputs.github-token }}
 
       - name: print k8s cluster status
